@@ -4,6 +4,7 @@ import "./index.css";
 document.addEventListener("DOMContentLoaded", () => {
   const searchInput = document.getElementById("searchInput");
   const searchResults = document.getElementById("searchResults");
+  const topSearchesContainer = document.getElementById("top-searches");
   let delayTimeout = null;
 
   searchInput.addEventListener("input", () => {
@@ -36,9 +37,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function fetchAndDisplayAnalytics() {
-    const analyticsContainer = searchResults;
-    analyticsContainer.innerHTML = "Loading analytics...";
-
     axios
       .get("https://search-api-2xru.onrender.com/search_analytics")
       .then((response) => {
@@ -50,7 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (filteredAnalytics.length === 0) {
           // If not, display "No analytics at the moment" message
-          analyticsContainer.innerHTML = "No analytics at the moment";
+          searchResults.innerHTML = "No analytics at the moment";
         } else {
           // Formatting and displaying filtered searches
           const analyticsContent = filteredAnalytics
@@ -60,7 +58,13 @@ document.addEventListener("DOMContentLoaded", () => {
             )
             .join("");
 
-          analyticsContainer.innerHTML = analyticsContent;
+          searchResults.innerHTML = analyticsContent;
+
+          // Calculate completeness scores and rank searches
+          const rankedSearches = rankSearches(filteredAnalytics);
+
+          // Display top searches
+          displayTopSearches(rankedSearches);
         }
       })
       .catch((error) => console.error("Error fetching analytics:", error));
@@ -86,6 +90,34 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     return Object.values(completeSearches).flat(); // Combine all complete searches
+  }
+
+  function rankSearches(searches) {
+    const queryCounts = {};
+
+    searches.forEach((search) => {
+      const { query } = search;
+      queryCounts[query] = (queryCounts[query] || 0) + 1;
+    });
+
+    const rankedSearches = searches.map((search) => ({
+      ...search,
+      count: queryCounts[search.query],
+    }));
+
+    return rankedSearches.sort((a, b) => b.count - a.count);
+  }
+
+  function displayTopSearches(searches) {
+    const topSearchesContent = searches
+      .slice(0, 5)
+      .map(
+        (search) =>
+          `<br/> <div>IP: ${search.ip_address} - ${search.query} (Count: ${search.count})</div>`
+      )
+      .join("");
+
+    topSearchesContainer.innerHTML = topSearchesContent;
   }
 
   fetchAndDisplayAnalytics();
