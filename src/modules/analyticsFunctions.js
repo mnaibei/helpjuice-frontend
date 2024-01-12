@@ -9,6 +9,7 @@ function isCompleteSearch(query) {
     "f",
     "g",
     "h",
+    "i",
     "j",
     "k",
     "l",

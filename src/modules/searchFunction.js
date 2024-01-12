@@ -29,6 +29,7 @@ export function fetchAndDisplayAnalytics() {
     .get("https://search-api-2xru.onrender.com/search_analytics")
     .then((response) => {
       const analyticsData = response.data;
+      console.log(analyticsData);
 
       // Filtering and displaying only the most complete searches
       const filteredAnalytics = filterCompleteSearches(analyticsData);
