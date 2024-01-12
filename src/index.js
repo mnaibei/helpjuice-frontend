@@ -71,9 +71,61 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function isCompleteSearch(query) {
-    const completeQueryPattern = /^[\w\s]+(\s|\?)$/;
+    const completeQueryPattern = /^[\w\s]+[.?\s]*$/;
+    const minimumWords = 2;
+    const forbiddenCharacters = ["@", "#", "$", "%", "^", "&", "*"];
+    const disallowedEndings = [
+      "b",
+      "c",
+      "d",
+      "f",
+      "g",
+      "h",
+      "j",
+      "k",
+      "l",
+      "m",
+      "n",
+      "p",
+      "q",
+      "r",
+      "s",
+      "t",
+      "v",
+      "w",
+      "x",
+      "y",
+      "z",
+      "a",
+      "e",
+      "o",
+    ];
 
-    return completeQueryPattern.test(query);
+    // Checking if the query matches the pattern and has more than 5 characters
+    const isPatternMatch =
+      completeQueryPattern.test(query.trim()) && query.trim().length > 5;
+
+    // Checking if the query contains the minimum number of words
+    const isMinimumWords = query.trim().split(" ").length >= minimumWords;
+
+    // Checking if the query does not contain any forbidden characters
+    const noForbiddenCharacters = !forbiddenCharacters.some((char) =>
+      query.includes(char)
+    );
+
+    // Checking if the last word of the query is a single character and does not end with a disallowed character
+    const words = query.trim().split(" ");
+    const lastWord = words[words.length - 1];
+    const isSingleChar = lastWord.length === 1;
+    const lastChar = lastWord.toLowerCase();
+    const isAllowedEnding = !disallowedEndings.includes(lastChar);
+
+    return (
+      isPatternMatch &&
+      isMinimumWords &&
+      noForbiddenCharacters &&
+      (!isSingleChar || isAllowedEnding)
+    );
   }
 
   function filterCompleteSearches(analyticsData) {
@@ -93,16 +145,19 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function rankSearches(searches) {
-    const queryCounts = {};
+    const uniqueQueries = Array.from(
+      new Set(searches.map((search) => search.query))
+    );
 
+    const queryCounts = {};
     searches.forEach((search) => {
       const { query } = search;
       queryCounts[query] = (queryCounts[query] || 0) + 1;
     });
 
-    const rankedSearches = searches.map((search) => ({
-      ...search,
-      count: queryCounts[search.query],
+    const rankedSearches = uniqueQueries.map((query) => ({
+      query,
+      count: queryCounts[query],
     }));
 
     return rankedSearches.sort((a, b) => b.count - a.count);
@@ -112,8 +167,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const topSearchesContent = searches
       .slice(0, 5)
       .map(
-        (search) =>
-          `<br/> <div>IP: ${search.ip_address} - ${search.query} (Count: ${search.count})</div>`
+        (search, index) =>
+          `<br/> <div> ${index + 1}.  ${search.query} (searches: ${
+            search.count
+          })</div>`
       )
       .join("");
 
