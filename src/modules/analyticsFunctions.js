@@ -74,12 +74,12 @@ function filterCompleteSearches(analyticsData) {
 
 function rankSearches(searches) {
   const uniqueQueries = Array.from(
-    new Set(searches.map((search) => search.query))
+    new Set(searches.map((search) => search.query.toLowerCase()))
   );
 
   const queryCounts = {};
   searches.forEach((search) => {
-    const { query } = search;
+    const query = search.query.toLowerCase();
     queryCounts[query] = (queryCounts[query] || 0) + 1;
   });
 
