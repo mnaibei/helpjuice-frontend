@@ -74,7 +74,11 @@ function filterCompleteSearches(analyticsData) {
 
 function rankSearches(searches) {
   const uniqueQueries = Array.from(
-    new Set(searches.map((search) => search.query.toLowerCase()))
+    new Set(
+      searches.map((search) =>
+        search.query.toLowerCase().replace(/[^\w\s]/g, "")
+      )
+    )
   );
 
   const queryCounts = {};
