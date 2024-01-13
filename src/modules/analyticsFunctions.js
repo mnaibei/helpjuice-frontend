@@ -1,6 +1,6 @@
 function isCompleteSearch(query) {
   const completeQueryPattern = /^[\w\s]+[.?\s]*$/;
-  const minimumWords = 2;
+  const minimumWords = 3;
   const forbiddenCharacters = ["@", "#", "$", "%", "^", "&", "*"];
   const disallowedEndings = [
     "b",
@@ -46,7 +46,7 @@ function isCompleteSearch(query) {
   const words = query.trim().split(" ");
   const lastWord = words[words.length - 1];
   const isSingleChar = lastWord.length === 1;
-  const lastChar = lastWord.toLowerCase();
+  const lastChar = lastWord.charAt(lastWord.length - 1).toLowerCase();
   const isAllowedEnding = !disallowedEndings.includes(lastChar);
 
   return (

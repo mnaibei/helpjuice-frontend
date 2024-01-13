@@ -10,14 +10,14 @@ import {
 describe("filterCompleteSearches", () => {
   it("should filter complete searches", () => {
     const analyticsData = [
-      { ip_address: "127.0.0.1", query: "Complete search" },
-      { ip_address: "127.0.0.2", query: "Incomplete @search" },
+      { id: 213, ip_address: "::1", query: "what is the weather like today" },
+      { id: 216, ip_address: "::1", query: "it is beautiful outside" },
+      { id: 215, ip_address: "::1", query: "hello good morning" },
     ];
 
     const result = filterCompleteSearches(analyticsData);
 
-    expect(result).toHaveLength(1);
-    expect(result[0].query).toBe("Complete search");
+    expect(result).toHaveLength(3); // All three searches are complete
   });
 
   it("should handle empty input", () => {

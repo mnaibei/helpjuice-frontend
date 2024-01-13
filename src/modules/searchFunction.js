@@ -48,7 +48,7 @@ export function fetchAndDisplayAnalytics() {
 
         searchResults.innerHTML = analyticsContent;
 
-        // Calculate completeness scores and rank searches
+        // rank searches
         const rankedSearches = rankSearches(filteredAnalytics);
 
         // Display top searches

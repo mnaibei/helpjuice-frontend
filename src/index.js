@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
     delayTimeout = setTimeout(() => {
       logSearch(query);
       fetchAndDisplayAnalytics();
-    }, 3000); // Delay for 3000ms (3 seconds)
+    }, 1000); // Delay for 3000ms (1 seconds)
   });
 
   fetchAndDisplayAnalytics();
