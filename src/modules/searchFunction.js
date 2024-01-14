@@ -25,6 +25,7 @@ export function logSearch(query) {
 }
 
 export function fetchAndDisplayAnalytics() {
+  searchResults.innerHTML = "Server spooling, please wait...";
   axios
     .get("https://search-api-2xru.onrender.com/search_analytics")
     .then((response) => {
