@@ -4,7 +4,7 @@ import { displayTopSearches } from "./analyticsFunctions";
 const searchResults = document.getElementById("searchResults");
 
 async function fetchAndDisplayAnalytics() {
-  searchResults.innerHTML = "Server spooling, please wait...";
+  // searchResults.innerHTML = "";
   try {
     const url1 = "https://search-api-2xru.onrender.com/search_analytics";
     const url2 = "http://localhost:3000/search_analytics";
@@ -33,3 +33,5 @@ async function fetchAndDisplayAnalytics() {
 }
 
 fetchAndDisplayAnalytics();
+
+export { fetchAndDisplayAnalytics };
