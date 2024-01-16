@@ -1,102 +1,19 @@
-function isCompleteSearch(query) {
-  const completeQueryPattern = /^[\w\s]+[.?\s]*$/;
-  const minimumWords = 3;
-  const forbiddenCharacters = ["@", "#", "$", "%", "^", "&", "*"];
-  const disallowedEndings = [
-    "b",
-    "c",
-    "d",
-    "f",
-    "g",
-    "h",
-    "i",
-    "j",
-    "k",
-    "l",
-    "m",
-    "n",
-    "p",
-    "q",
-    "r",
-    "s",
-    "t",
-    "v",
-    "w",
-    "x",
-    "y",
-    "z",
-    "a",
-    "e",
-    "o",
-  ];
+import "../index.css";
+const axios = require("axios");
+async function displayTopSearches() {
+  const url1 = "https://search-api-2xru.onrender.com/logs/history";
+  const url2 = "http://localhost:3000/logs/history";
+  const url3 = "https://helpjuice-search-app.fly.dev/logs/history";
 
-  // Checking if the query matches the pattern and has more than 5 characters
-  const isPatternMatch =
-    completeQueryPattern.test(query.trim()) && query.trim().length > 5;
+  const url = url3;
+  const response = await axios.get(url);
+  console.log(response.data);
+  const searches = response.data.history; // Access the 'history' property
+  console.log(searches);
 
-  // Checking if the query contains the minimum number of words
-  const isMinimumWords = query.trim().split(" ").length >= minimumWords;
+  const rankedSearches = rankSearches(searches);
 
-  // Checking if the query does not contain any forbidden characters
-  const noForbiddenCharacters = !forbiddenCharacters.some((char) =>
-    query.includes(char)
-  );
-
-  // Checking if the last word of the query is a single character and does not end with a disallowed character
-  const words = query.trim().split(" ");
-  const lastWord = words[words.length - 1];
-  const isSingleChar = lastWord.length === 1;
-  const lastChar = lastWord.charAt(lastWord.length - 1).toLowerCase();
-  const isAllowedEnding = !disallowedEndings.includes(lastChar);
-
-  return (
-    isPatternMatch &&
-    isMinimumWords &&
-    noForbiddenCharacters &&
-    (!isSingleChar || isAllowedEnding)
-  );
-}
-function filterCompleteSearches(analyticsData) {
-  const completeSearches = {};
-
-  analyticsData.forEach((search) => {
-    const currentSearches = completeSearches[search.ip_address] || [];
-
-    // Check for completeness based on regex pattern
-    if (isCompleteSearch(search.query)) {
-      currentSearches.push(search);
-      completeSearches[search.ip_address] = currentSearches;
-    }
-  });
-
-  return Object.values(completeSearches).flat(); // Combine all complete searches
-}
-
-function rankSearches(searches) {
-  const uniqueQueries = Array.from(
-    new Set(
-      searches.map((search) =>
-        search.query.toLowerCase().replace(/[^\w\s]/g, "")
-      )
-    )
-  );
-
-  const queryCounts = {};
-  searches.forEach((search) => {
-    const query = search.query.toLowerCase();
-    queryCounts[query] = (queryCounts[query] || 0) + 1;
-  });
-
-  const rankedSearches = uniqueQueries.map((query) => ({
-    query,
-    count: queryCounts[query],
-  }));
-
-  return rankedSearches.sort((a, b) => b.count - a.count);
-}
-
-function displayTopSearches(searches) {
-  const topSearchesContent = searches
+  const topSearchesContent = rankedSearches
     .slice(0, 5)
     .map(
       (search, index) =>
@@ -110,4 +27,18 @@ function displayTopSearches(searches) {
   topSearchesContainer.innerHTML = topSearchesContent;
 }
 
-export { filterCompleteSearches, rankSearches, displayTopSearches };
+function rankSearches(searches) {
+  const count = searches.reduce((acc, curr) => {
+    acc[curr] = (acc[curr] || 0) + 1;
+    return acc;
+  }, {});
+
+  const rankedSearches = Object.keys(count).map((query) => ({
+    query,
+    count: count[query],
+  }));
+
+  return rankedSearches.sort((a, b) => b.count - a.count);
+}
+
+export { rankSearches, displayTopSearches };

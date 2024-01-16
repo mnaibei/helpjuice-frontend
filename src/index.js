@@ -1,4 +1,4 @@
-import { logSearch, fetchAndDisplayAnalytics } from "./modules/searchFunction";
+import axios from "axios";
 import "./index.css";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -9,13 +9,34 @@ document.addEventListener("DOMContentLoaded", () => {
   searchInput.addEventListener("input", () => {
     const query = searchInput.value;
 
-    // Delay the request using setTimeout
-    clearTimeout(delayTimeout); // Clear any existing timeout
+    // Clear any existing timeout
+    clearTimeout(delayTimeout);
+
+    // Set a new timeout
     delayTimeout = setTimeout(() => {
       logSearch(query);
-      fetchAndDisplayAnalytics();
-    }, 1000); // Delay for 3000ms (1 seconds)
+    }, 1000); // Delay for 1000ms (1 second)
   });
 
-  fetchAndDisplayAnalytics();
+  function logSearch(query) {
+    const url1 = "https://search-api-2xru.onrender.com/logs/search";
+    const url2 = "http://localhost:3000/logs/search";
+    const url3 = "https://helpjuice-search-app.fly.dev/logs/search";
+    const url = url3;
+
+    axios
+      .post(
+        url,
+        { searchquery: query },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => console.error("Error:", error));
+  }
 });

@@ -1,41 +1,49 @@
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin'); // eslint-disable-line import/no-extraneous-dependencies
+const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin"); // eslint-disable-line import/no-extraneous-dependencies
 
 module.exports = {
-  mode: 'development',
+  mode: "development",
   entry: {
-    index: './src/index.js',
+    index: "./src/index.js",
+    results: "./src/modules/results.js",
   },
   devServer: {
-    static: './dist',
+    static: "./dist",
   },
-  devtool: 'inline-source-map',
+  devtool: "inline-source-map",
   plugins: [
     new HtmlWebpackPlugin({
-      template: './src/index.html',
+      filename: "index.html",
+      template: "./src/index.html",
+      chunks: ["index"],
+    }),
+    new HtmlWebpackPlugin({
+      filename: "results.html",
+      template: "./src/results.html",
+      chunks: ["results"],
     }),
   ],
   output: {
-    filename: '[name].bundle.js',
-    path: path.resolve(__dirname, 'dist'),
+    filename: "[name].bundle.js",
+    path: path.resolve(__dirname, "dist"),
     clean: true,
   },
   optimization: {
-    runtimeChunk: 'single',
+    runtimeChunk: "single",
   },
   module: {
     rules: [
       {
         test: /\.css$/i,
-        use: ['style-loader', 'css-loader'],
+        use: ["style-loader", "css-loader"],
       },
       {
         test: /\.(png|svg|jpg|jpeg|gif)$/i,
         use: [
           {
-            loader: 'file-loader',
+            loader: "file-loader",
             options: {
-              outputPath: 'assets/images', // output folder for images
+              outputPath: "assets/images", // output folder for images
             },
           },
         ],

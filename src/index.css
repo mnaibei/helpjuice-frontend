@@ -1,7 +1,37 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+}
+
 body {
     font-family: Arial, sans-serif;
     padding: 20px;
     background-color: #f4f4f4;
+}
+
+nav {
+    border: 4px solid;
+    display: flex;
+    padding: 10px;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+
+    align-items: center;
+    justify-content: space-between;
+    width: 15%;
+}
+
+nav ul li a {
+    padding: 10px;
+    text-decoration: none;
+    color: black;
 }
 
 #searchInput {
