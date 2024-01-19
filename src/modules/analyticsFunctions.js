@@ -5,7 +5,7 @@ async function displayTopSearches() {
   const url2 = "http://localhost:3000/logs/history";
   const url3 = "https://helpjuice-search-app.fly.dev/logs/history";
 
-  const url = url3;
+  const url = url2;
   const response = await axios.get(url);
   console.log(response.data);
   const searches = response.data.history; // Access the 'history' property

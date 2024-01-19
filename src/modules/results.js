@@ -10,7 +10,7 @@ async function fetchAndDisplayAnalytics() {
     const url2 = "http://localhost:3000/search_analytics";
     const url3 = "https://helpjuice-search-app.fly.dev/search_analytics";
 
-    const url = url3;
+    const url = url2;
     const response = await axios.get(url);
     const analyticsData = response.data;
     console.log(analyticsData);
