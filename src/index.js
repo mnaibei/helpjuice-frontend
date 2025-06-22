@@ -22,7 +22,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const url1 = "https://search-api-2xru.onrender.com/logs/search";
     const url2 = "http://localhost:3000/logs/search";
     const url3 = "https://helpjuice-search-app.fly.dev/logs/search";
-    const url = url2;
+    const url4 = "https://helpjuice-search-app.onrender.com";
+    const url = url4;
 
     axios
       .post(

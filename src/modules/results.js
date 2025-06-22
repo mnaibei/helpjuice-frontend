@@ -9,8 +9,9 @@ async function fetchAndDisplayAnalytics() {
     const url1 = "https://search-api-2xru.onrender.com/search_analytics";
     const url2 = "http://localhost:3000/search_analytics";
     const url3 = "https://helpjuice-search-app.fly.dev/search_analytics";
+    const url4 = "https://helpjuice-search-app.onrender.com";
 
-    const url = url2;
+    const url = url4;
     const response = await axios.get(url);
     const analyticsData = response.data;
     console.log(analyticsData);

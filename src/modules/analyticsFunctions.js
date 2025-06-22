@@ -4,8 +4,9 @@ async function displayTopSearches() {
   const url1 = "https://search-api-2xru.onrender.com/logs/history";
   const url2 = "http://localhost:3000/logs/history";
   const url3 = "https://helpjuice-search-app.fly.dev/logs/history";
+  const url4 = "https://helpjuice-search-app.onrender.com";
 
-  const url = url2;
+  const url = url4;
   const response = await axios.get(url);
   console.log(response.data);
   const searches = response.data.history; // Access the 'history' property
